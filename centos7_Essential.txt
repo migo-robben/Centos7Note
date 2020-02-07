@@ -1,0 +1,709 @@
+1.7z 解压压缩软件
+    yum -y install p7zip
+    解压:
+        7za e src_file.7z，解压名为src_file.7z的文件，不保留原来的目录结构
+        7za x src_file.7z，解压名为src_file.7z的文件，保留原来的目录结构
+    压缩：
+        7za a dest_file.7z src_file，dest_file.7z目标文件名，src_file原文件夹
+
+    # -----
+    tar负责打包，gzip负责压缩
+    tar：
+        这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。
+        -c 压缩
+        -x 解压
+        -t 查看内容
+        -r 向压缩归档文件未追加文件
+        -u 更新原压缩包中的文件
+
+        下面的参数是根据需要在压缩或解压档案时可选的。
+        -z 有gzip属性的
+        -j 有bz2属性的
+        -Z 有compress属性的
+        -v 显示所有过程
+        -O 将文件解开到标准输出
+        
+        下面的参数-f是必须的
+        -f 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名。
+        
+        例如：
+            我要打包Jimmy文件夹，tar -cvf Jimmy.tar Jimmy，将Jimmy文件夹打包成Jimmy.tar文件
+            我要打包压缩Jimmy文件夹，tar -czvf Jimmy.tar.gz Jimmy
+            我要打包压缩Jimmy文件夹，tar -cjvf Jimmy.tar.bz2 Jimmy
+            我要解压Jimmy.tar.gz文件，tar -xzf Jimmy.tar.gz
+    
+    # -----
+    unzip myzip.zip
+
+    zip -r test.zip /source
+    
+
+2.rpm包的安装/升级/卸载
+    rpm -ivh 包的全名称
+    option:
+        -i(install) 安装
+        -v(verbose) 显示详细信息
+        -h(hash) 显示进度
+        --nodeps 不检测依赖性
+    
+    rpm -Uvh 包的全名称
+    option:
+        -U(upgrade) 升级
+
+    rpm -e 包的全名称
+    option:
+        -e(erase) 卸载
+
+3.删除文件/文件夹
+    rm [option] 文件
+        -f     -force 忽略不存在的文件，强制删除，无任何提示
+        -i     --interactive 进行交互式地删除
+        -r|-R  --recursive 递归式地删除列出目录下的所有目录和文件
+        -v     --verbose 详细显示进行的步骤
+    rmdir [option] 文件夹
+        -p     --parents   remove DIRECTORY and its ancestors; e.g., 'rmdir -p a/b/c' is similar to 'rmdir a/b/c a/b a'
+
+4.改变桌面图标的大小
+    gsettings set org.gnome.nautilus.icon-view default-zoom-level small
+    gsettings set org.gnome.nautilus.icon-view default-zoom-level large
+
+5.查看是否安装了指定包
+    yum list installed | grep [包名]
+    yum list installed | grep ntfs-3g 查看是否安装了ntfs-3g包
+
+6.挂载其他硬盘 - lsblk
+    我将分区挂载到 /home/migo/Drive，所以先mkdir Drive
+    首先进入到/dev目录，查看设备，会看到sda，sdb等字样，代表有两个硬盘a和b，sdb后的数字表示给硬盘的第几个分区，例如sdb1，sdb2代表硬盘的1和2两个分区
+    例如我要挂载的是sdb1和sdb2一个硬盘的两个分区
+    要挂载ntfs格式的盘，必须要安装ntfs-3g包：
+        ||==== Install the NTFS package ====||
+        make CentOS recognize the ntfs file system
+            - # yum -y install epel-release
+            - # yum -y install ntfs-3g --enablerepo=epel-testing
+
+        make CentOS upzip .7z  and .rar file
+            - # yum -y install unar    //unzip .rar file
+            - # yum -y install p7zip  //unzip .7z file
+
+        mount the ntfs hard drive
+            - $ mkdir /home/migo/drive
+            - $ sudo mount -t ntfs /dev/sdc1 /home/migo/Drive_1
+            - $ sudo mount -t ntfs /dev/sdc2 /home/migo/Drive_2
+        ||==================================||
+    取消挂载
+        sudo umount /dev/sdb1
+
+    Fix Read-Only file system:
+        sudo mount -o remount,rw Drive_1
+
+    # 1. 用用户权限创建文件夹Drive_1
+      2. ntfsfix /dev/sdc1
+      3. sudo mount -t ntfs /dev/sdc1 /home/migo/Drive_1
+      4. 就可以读写该硬盘了
+      5. vim /etc/fstab -------> /dev/sdc1 /home/migo/Drive_1 ntfs default 0 0
+
+7.查看硬盘情况
+    lsblk 查看分区和磁盘
+    df -h 查看空间使用情况
+    fdisk -l 分区工具查看分区信息
+    cfdisk /dev/sda 查看分区
+    blkid 查看硬盘label（别名）
+    du -sh ./* 统计当前目录各文件夹大小
+    free -h 查看内存大小
+    cat /proc/cpuinfo| grep "cpu cores"| uniq 查看cpu核心数
+    cat /proc/cpuinfo| grep "physical id"|uniq| wc -l 查看物理cpu个数
+    cat /proc/cpuinfo| grep "processor"| wc -l 查看逻辑cpu的个数
+
+8.安装gcc
+    http://mirrorservice.org/sites/sourceware.org/pub/gcc/releases/ 查看最新版的gcc，例如8.3.0
+
+    - $ wget http://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-8.3.0/gcc-8.3.0.tar.gz
+    - $ tar zxf gcc-8.3.0.tar.gz
+    - $ cd gcc-8.3.0
+    - $ yum -y install bzip2
+    - $ ./contrib/download_prerequisites # 如果下载失败，可以手动下载放置gcc-8.3.0目录下
+    - $ ./configure --prefix=/home/migo/DEV_PROJECTS/COMPILER/gcc-8.3.0 --disable-multilib --enable-languages=c,c++ 
+    - $ make -j 8
+    - $ make install
+
+    - root cannot use this latest gcc after above installation until execute the following command, 
+        - which puts the /usr/local/bin at the first place of $PATH
+    - $ export PATH="/usr/local/bin/:$PATH" 
+    - $ export CC="/usr/local/bin/gcc"
+    - $ export CXX="/usr/local/bin/g++"
+    - $ export LD_LIBRARY_PATH="/usr/local/lib64:$LD_LIBRARY_PATH"
+
+    - notes from GCC installation: 
+    Libraries have been installed in:
+       /usr/local/lib/../lib64
+
+    测试使用：
+        有一份c++文件，HelloWorld.c++:
+        #include <iostream>
+        int main()
+        {
+            std::cout<<"Hello World."<<std::endl;
+            return 1;       
+        }
+        $ g++ HelloWorld.c++ 或者 g++ HelloWorld.c++ -o HelloWorld
+        前者会生成一个a.out文件，直接运行./a.out
+        后者会生成一个HelloWorld的可执行文件，直接运行./HelloWorld
+
+        如果是c文件，例如HelloWorld.c
+        $ gcc HelloWorld.c 或者 gcc HelloWorld.c -o HelloWorld
+
+9.pip 走代理
+    sudo pip install cmake --proxy "http://127.0.0.1:8118"
+pip
+10.安装 cmake
+    sudo pip install cmake
+    配置cmake环境变量：
+        nano /etc/profile
+        在最后添加：
+            export PATH=/usr/lib64/python2.7/site-packages/cmake/data/bin:$PATH
+        保存文件，退出
+        source /etc/profile
+
+11.安装 sublime
+    sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
+    sudo yum-config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
+    sudo yum install sublime-text
+
+12.安装 google Chrome
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+    sudo yum localinstall google-chrome-stable_current_x86_64.rpm
+
+13.环境变量
+    export PATH="/usr/local/bin/:$PATH" (在当前终端窗口中有效)
+    修改 /etc/profile 文件，在末尾加上:export PATH="/usr/local/bin/:$PATH"
+    source /etc/profile，让系统配置文件生效的命令
+
+14.安装maya
+    方法1：参考https://knowledge.autodesk.com/support/maya/troubleshooting/caas/CloudHelp/cloudhelp/2019/ENU/Installation-Maya/files/GUID-E7E054E1-0E32-4B3C-88F9-BF820EB45BE5-htm.html
+        其中/usr/autodesk/maya2019/bin/adlmreg -i S 657k1 657k1 2019.0.0.F 562-98932138 /var/opt/Autodesk/Adlm/Maya2019/MayaConfig.pit
+
+    方法2：解压maya的安装包，运行./setup
+
+    启动maya，如果出现/usr/autodesk/maya2019/bin/maya.bin: error while loading shared libraries: libGLU.so.1: cannot open shared object file: No such file or directory
+    就yum -y install libGLU
+
+    maya2018 tiff.so.3 error, sudo yum install compat-libtiff3
+
+15.登陆140
+    ssh root@192.168.17.140 密码：wsrdcentfs2020
+
+16.查找
+    查找文件 find / -name 'filename'
+    查找目录 find / -name 'path' -type d
+    查找内容 find . | xargs grep -ri ‘content’
+
+17.编译USD
+    at first, it needs to temporary uninstall ffmpeg
+        - switch to root
+        - locate to /home/predator/ffmpeg/ffmpeg-4.1.3/
+         # make uninstall
+        - prior to build USD, it needs to install the followings
+         # yum -y install python-devel libXrandr-devel libXcursor-devel libXinerama-devel libXi-devel mesa-libGLU-devel
+         # yum -y install bzip2-\*
+         # yum -y install LibRaw-\*
+         # yum -y install libwebp-\*
+         # yum -y install freetype-\*
+        - it's not necessary to use root to build USD 
+         # exit 
+
+        - switch to gcc 4.8.5
+         $ export "PATH=/usr/bin/:$PATH"
+        - to verify the gcc version
+         $ gcc --version
+
+        - locate to /home/predator/DEV_PROJECTS
+        $ git clone https://github.com/PixarAnimationStudios/USD.git
+        $ cd USD/build_scripts
+        $ export "MAYA_LOCATION=/usr/autodesk/maya2019/"
+        $ export "HOUDINI_LOCATION=/opt/hfs17.5.360/"
+        $ export "KATANA_API_LOCATION=/opt/Katana3.1v4/"
+    
+    编译不过尝试用root权限：
+    python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --draco --draco-location "/home/migo/DEV_PROJECTS/DEPENDENCIES/draco/" --materialx --ptex ../../../WSRD/USD/
+
+    python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --draco --draco-location "/home/migo/DEV_PROJECTS/DEPENDENCIES/draco/" --maya-location /usr/autodesk/maya2019 --maya --materialx --houdini-location /opt/hfs17.5.425 --houdini ../../../WSRD/USD/
+
+
+    The following in your PYTHONPATH environment variable:
+    /home/migo/DEV_PROJECTS/WSRD_USD/lib/python
+
+    The following in your PATH environment variable:
+    /home/migo/DEV_PROJECTS/WSRD_USD/bin
+
+    NVIDIA_USD要用python动态库
+    python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --materialx ../../../../WSRD/NVIDIA/USD/
+
+    python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --build-monolithic --materialx --houdini-location /opt/hfs17.5.425 --houdini ../../../WSRD/USD_v19.07_monolithic/
+
+
+18.创建文件和文件夹
+    mkdir test
+    touch test/test.txt
+
+19.软连接
+    mkdir test
+    cd test
+    touch test.txt
+    echo "Hello World">test.txt
+    ln -s test/ test_lnk
+
+    错误删除软连接：
+        rm -rf ./test_lnk/ 会把test文件夹里面的文件删除
+    正确删除软连接：
+        rm -rf ./test_lnk 不会把test文件夹里面的文件删除
+
+20.
+    # ------------------------------------------------
+    文件移动命令mv
+
+    命令格式：mv [-fiv] source destination
+    参数说明：
+    -f:force，强制直接移动而不询问
+    -i:若目标文件(destination)已经存在，就会询问是否覆盖
+    -u:若目标文件已经存在，且源文件比较新，才会更新
+
+    # ------------------------------------------------
+    文件复制命令cp
+
+    命令格式：cp [-adfilprsu] 源文件(source) 目标文件(destination)
+    cp [option] source1 source2 source3 ... directory
+    参数说明：
+    -a:是指archive的意思，也说是指复制所有的目录
+    -d:若源文件为连接文件(link file)，则复制连接文件属性而非文件本身
+    -f:强制(force)，若有重复或其它疑问时，不会询问用户，而强制复制
+    -i:若目标文件(destination)已存在，在覆盖时会先询问是否真的操作
+    -l:建立硬连接(hard link)的连接文件，而非复制文件本身
+    -p:与文件的属性一起复制，而非使用默认属性
+    -r:递归复制，用于目录的复制操作
+    -s:复制成符号连接文件(symbolic link)，即“快捷方式”文件
+    -u:若目标文件比源文件旧，更新目标文件
+
+21.文件权限
+    Linux系统中，每一个文件都有文件所有者和所属群组，并且规定文件的所有者，所属群组，以及其他人队问价有读取（r), 可写(w),执行(x)等权限，
+    亦可分别用数字4、2、1 表示。
+    文件的可读、可写、可执行权限可以简写为rwx，也可以使用数字7表示（4+2+1）。
+
+    权限设定字符串格式如下：
+    [ugoa...][[+-=][rwxX]...][,...]
+    其中
+
+    u 表示该文件的拥有者，g 表示与该文件的拥有者属于同一个群体(group)者，o 表示其他以外的人，a 表示这三者皆是。
+    + 表示增加权限、- 表示取消权限、= 表示唯一设定权限。
+    r 表示可读取，w 表示可写入，x 表示可执行，X 表示只有当该文件是个子目录或者该文件已经被设定过为可执行。
+
+    参数：
+    -c : 若该文件权限确实已经更改，才显示其更改动作
+    -f : 若该文件权限无法被更改也不要显示错误讯息
+    -v : 显示权限变更的详细资料
+    -R : 对目前目录下的所有文件与子目录进行相同的权限变更(即以递回的方式逐个变更)
+
+22.安装QtCreator
+    安装依赖：
+        sudo yum groupinstall "C Development Tools and Libraries"
+        sudo yum install libgl libgl-devel
+        sudo yum install mesa-libGL-devel mesa-libGLU-devel freeglut-devel
+        sudo yum install libxcb libxcb-devel libXrender libXrender-devel xcb-util-wm xcb-util-wm-devel xcb-util xcb-util-devel xcb-util-image xcb-util-image-devel xcb-util-keysyms xcb-util-keysyms-devel
+    下载QtCreator:
+        # http://download.qt.io/archive/qt/5.13/5.13.2/qt-opensource-linux-x64-5.13.2.run
+        注意，可以下载online 安装版
+    修改权限：
+        chmod +x qt-opensource-linux-x64-5.13.2.run
+    执行安装：
+        ./qt-opensource-linux-x64-5.13.2.run
+
+    用root /opt/Qt
+    用sudo /home/migo/Qt
+
+23.安装UnrealEngine
+    References：
+        https://wiki.unrealengine.com/Building_On_Centos
+        https://github.com/20tab/UnrealEnginePython/issues/613
+    20tab python plugin:
+        Note : export LD_LIBRARY_PATH=[python path to libpython3.7m.so]
+               export "LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH"
+
+24.修改密码：
+    passwd root 修改root密码
+    passwd migo 修改用户migo密码
+
+25.
+    vim /etc/ld.so.config，将自己的库加到这里面，就会优于系统库
+    ldconfig | grep libpythonpip
+
+26.安装python3.7
+    ||==== Python ====||
+    install Python 3.7.5:
+        - install the following dependencies prior to install Python3.7
+        - $ yum -y install openssl-devel libffi-devel
+        - $ cd /home/predator/Downloads/
+        - $ wget https://www.python.org/ftp/python/3.7.5/Python-3.7.5.tgz
+        - $ tar xzf Python-3.7.5.tgz
+        - $ cd Python-3.7.5/
+        - $ ./configure --enable-shared --enable-optimizations --prefix=/home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.5
+        (先运行./configure --enable-optimizations --prefix=/home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.5，
+         
+         再运行./configure --enable-shared --prefix=/home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.5_shared,
+         
+         然后将Python3.7.5_shared中的.so动态库移动到Python3.7.5的lib中)
+        - $ make altinstall   //avoid overwriting the OS built-in Python2.7
+
+    Switch Python 3.7 as default Python
+        - $ alternatives --list | grep -i python    pi //prints nothing at the first time
+        - $ alternatives --install /usr/bin/python python /usr/local/bin/python3.7 60
+        - $ alternatives --install /usr/bin/python python /usr/bin/python2 50
+        - $ alternatives --config python          //select the desired version of Python
+        PS: ----- > export "LD_LIBRARY_PATH=/home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.5/lib"
+        - need to switch back to the built-in Python 2 when using "yum" command
+
+    Switch pip3.7 as default pip 
+        - $ rm -f /usr/bin/pip
+        - $ ln -s /usr/local/bin/pip3.7 /usr/bin/pip
+
+    if wanted to use original built-in pip, please type "pip2" instead of "pip", or execute the following command
+        - $ rm -f /usr/bin/pip
+        - $ ln -s /bin/pip2 /usr/bin/pip
+    ||=======||
+
+    new pip:
+        python -m pip install xxx
+    old pip:
+        pip install xxx
+
+    参考：https://gist.github.com/jgibbard/3917da6d4c8303915f301e4bda5265f4
+
+27.安装boost 1.70.0
+    参考：
+        https://www.cnblogs.com/freeweb/p/9209362.html  
+
+    下载 boost_1_70_0
+    tar zxvf boost_1_70_0.tar.gz
+    cd boost_1_70_0
+    ./bootstrap.sh --prefix=/home/migo/DEV_PROJECTS/DEPENDENCIES/boost_1_70_0 --with-python=/usr/local/bin/python3.7 --with-python-version=3.7 --with-python-root=-with-python-root=/usr/local/lib
+
+    vim user-config.jam
+        using python : 3.7 : /home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.5/bin/python3.7 : /home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.5/include/python3.7m : /home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.5/lib ;
+        
+    ./b2 --prefix="/home/migo/DEV_PROJECTS/DEPENDENCIES/boost_1_70_0" address-model=64 variant=release threading=multi link=shared --user-config=user-config.jam --with-python install
+
+    # -------------------------- 如果用blender的python3.7.4
+    ./bootstrap.sh --prefix=/home/migo/DEV_PROJECTS/DEPENDENCIES/boost_1_70_0 --with-python=/home/migo/DEV_PROJECTS/DEPENDENCIES/BlenderLIBS/python-3.7.4/bin/python3 --with-python-version=3.7 --with-python-root=/home/migo/DEV_PROJECTS/DEPENDENCIES/BlenderLIBS/python-3.7.4/lib
+
+    ./b2 --prefix="/home/migo/DEV_PROJECTS/DEPENDENCIES/boost_1_70_0" address-model=64 variant=release threading=multi link=shared --user-config=user-config.jam --with-python
+
+
+    using python : 3.7 : /home/migo/DEV_PROJECTS/DEPENDENCIES/BlenderLIBS/python-3.7.4/bin/python3 : /home/migo/DEV_PROJECTS/DEPENDENCIES/BlenderLIBS/python-3.7.4/include/python3.7m : /home/migo/DEV_PROJECTS/DEPENDENCIES/BlenderLIBS/python-3.7.4/lib ;
+
+28.draco
+    cd draco
+    mkdir build
+    cd build
+    cmake -DCMAKE_INSTALL_PREFIX=/home/migo/DEV_PROJECTS/DEPENDENCIES/draco ../
+    make -j8 install
+
+29.Github
+    Reference:
+        https://blog.csdn.net/majinggogogo/article/details/81152938
+
+30.
+    ssh root@192.168.16.117 password:2019
+
+31.关于环境变量
+    1.临时生效
+        export PATH=$PATH:/root/.config/composer/vendor/bin
+        使用 export 设置的变量，只对当前终端 Shell 有效，也就是说如果新打开一个终端，那这个 export 设置的变量在新终端中是无法读取到的。适合设置一些临时变量。
+    2.通过修改配置文件
+        首先是设置全局环境变量，对所有用户都会生效：
+            /etc/profile: 此文件为系统的每个用户设置环境信息。当用户登录时，该文件被执行一次，并从 /etc/profile.d 目录的配置文件中搜集shell 的设置。一般用于设置所有用户使用的全局变量。
+            /etc/bashrc: 当 bash shell 被打开时，该文件被读取。也就是说，每次新打开一个终端shell，该文件就会被读取。
+
+        对单个用户生效:
+            ~/.bash_profile 或 ~/.profile: 只对单个用户生效，当用户登录时该文件仅执行一次。用户可使用该文件添加自己使用的 shell 变量信息。另外在不同的LINUX操作系统下，这个文件可能是不同的，可能是 ~/.bash_profile， ~/.bash_login 或 ~/.profile 其中的一种或几种，如果存在几种的话，那么执行的顺序便是：~/.bash_profile、 ~/.bash_login、 ~/.profile。比如 Ubuntu 系统一般是 ~/.profile 文件。
+            ~/.bashrc: 只对单个用户生效，当登录以及每次打开新的 shell 时，该文件被读取。
+
+32.shadowsock
+    ||==== Install Shadowsocks ====||
+    pip install https://github.com/shadowsocks/shadowsocks/archive/master.zip
+
+    vim /etc/shadowsocks/shadowsocks.json
+    {
+       "server":"c35s1.jamjams.net",
+       "server_port":56877,
+       "local_address":"127.0.0.1",
+       "local_port":1080,
+       "password":"8fXJtPBYgY",
+       "timeout":300,
+       "method":"aes-256-gcm",
+       "fast_open":false,
+       "workers":1
+    }
+
+    {
+       "server":"67.218.141.9",
+       "server_port":10240,
+       "local_port":1080,
+       "password":"etIYBsHDTUCG",
+       "timeout":300,
+       "method":"aes-256-cfb",
+       "fast_open":false
+    }
+
+
+    vim /etc/systemd/system/shadowsocks.service
+    [Unit]
+    Description=Shadowsocks
+    [Service]
+    TimeoutStartSec=0
+    ExecStart=/usr/bin/sslocal -c /etc/shadowsocks/shadowsocks.json
+    [Install]
+    WantedBy=multi-user.target
+    
+    注意sslocal的路径, 另外：forward-socks5t / 127.0.0.1:1080            ：1336行
+
+    yum -y install privoxy
+    rename "privoxy_config" to "config" and copy it to /etc/privoxy/config
+
+    systemctl enable shadowsocks.service
+    systemctl start shadowsocks.service
+    systemctl status shadowsocks
+    systemctl enable privoxy
+    systemctl start privoxy
+    systemctl status privoxy
+
+    vim /etc/profile
+    #append the following to the end of the "profile" file
+    export http_proxy=http://127.0.0.1:8118
+    export https_proxy=http://127.0.0.1:8118
+
+    source /etc/profile
+
+    setup the Network Proxy
+    - use Manual
+    - HTTP Proxy 127.0.0.1 8118
+    - HTTPS Proxy 127.0.0.1 8118
+    ||=======|
+
+33.CentOS中使用sudo执行命令走proxy代理不生效问题
+    问题描述：
+        在Linux系统中，在/etc/profile中设置了全局http_proxy代理或者在某个用户下设置了http_proxy代理。使用普通用户执行命令时代理是生效的，但是，在使用sudo执行命令的时候代理却不生效。
+
+    解决方法：
+        在/etc/sudoers中加入：
+
+        Defaults env_keep += "http_proxy https_proxy no_proxy"
+
+    重试即可。
+
+34.OpenSubdiv
+    python build_osd.py "/home/migo/DEV_PROJECTS/DEPENDENCIES/OpenSubdiv" -j8 --tests --examples --tutorials --ptex --tbb --omp --opencl --directx
+
+35.
+    ALL_PROXY=socks://127.0.0.1:10808/
+    all_proxy=socks://127.0.0.1:10808/
+
+    sudo cp ~/Downloads/SOFTWARE/v2ray/LA_BWG_GIA.json /etc/v2ray/config.json
+    sudo cp ~/Downloads/SOFTWARE/v2ray/myV2ray.json /etc/v2ray/config.json 
+    privoxy 改端口等
+
+36.
+    ||==== Install RLM ====||
+        - copy the "RLM_Linux-64" folder to /home/predator/
+            - $ cp /path/to/RLM_Linux-64 
+        - execute the following commands
+            - $ chmod +x rlm_install.sh rlm_uninstall.sh rlm_client.sh
+            - $ ./rlm_install.sh
+            - $ service rlmd start
+    ||=======||
+
+37. OpenShadingLanguage
+    cmake -DCMAKE_INSTALL_PREFIX=/home/migo/DEV_PROJECTS/DEPENDENCIES/OpenShadingLanguage -DCMAKE_PREFIX_PATH=/home/migo/DEV_PROJECTS/WSRD/USD -DLLVM_DIRECTORY=/home/migo/DEV_PROJECTS/COMPILERFRAMEWORK/llvm-5.x ../
+
+    注意,其中会用到oiio,oiio会对应boost版本,所以可以直接用USD里面build好的东西
+    gcc - 4.8.3
+
+38. Install llvm
+    - use root and locate to /root directory and execute the followings
+        - $ git clone https://github.com/llvm/llvm-project.git
+        - $ cd llvm-project
+        - $ mkdir build
+        - $ cmake -DLLVM_ENABLE_PROJECTS=clang -DLLVM_INSTALL_UTILS=ON 
+        - $ DCMAKE_INSTALL_PREFIX=/home/migo/DEV_PROJECTS/COMPILERFRAMEWORK/llvm -G "Unix Makefiles" ../llvm
+        - $ make -j 8
+        - $ make install
+
+39. Install ispc (something error)
+    - $ export "PATH=/home/migo/DEV_PROJECTS/COMPILERFRAMEWORK/llvm/bin:$PATH"
+    - $ cmake -DCMAKE_INSTALL_PREFIX="/home/migo/DEV_PROJECTS/DEPENDENCIES/ispc" ../
+
+40. 关于houdiniUSD plugin的问题
+    要加上环境变量 LD_LIBRARY_PATH=/home/migo/DEV_PROJECTS/COMPILER/gcc-8.3.0/lib64:$LD_LIBRARY_PATH
+
+41. Autodesk maya_usd
+    因为要利用到pxr_usd，所以pxr_usd不用编译maya_plugin，不然会重名报错
+    cmake -DCMAKE_INSTALL_PREFIX="/home/migo/DEV_PROJECTS/WSRD/maya-usd/install/Release" -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  -DMAYA_LOCATION="/usr/autodesk/maya2019" -DPXR_USD_LOCATION="/home/migo/DEV_PROJECTS/WSRD/USD_v19.05" ../
+
+    cmake --build . --config Release --clean-first --target install -- -j8
+
+    # use build script
+    python build.py "/home/migo/DEV_PROJECTS/WSRD/maya-usd" --install-location "/home/migo/DEV_PROJECTS/WSRD/maya-usd" --build-release --pxrusd-location "/home/migo/DEV_PROJECTS/WSRD/USD_v19.05" --maya-location "/usr/autodesk/maya2019"
+    注意：用-j8编译不通过所以，不要用多线程编译
+
+42. How to Install GCC 7 on CentOS 7 - Autodesk arnold-usd
+    # usd custom compile gcc can not work, so use following to install GCC 7.3.1
+        # yum install centos-release-scl
+        # yum install devtoolset-7-gcc-c++
+        $ scl enable devtoolset-7 bash
+
+        yum install rh-python36
+        scl enable rh-python36 bash
+
+    MODE='opt'
+    ARNOLD_PATH='/home/migo/DEV_PROJECTS/DEPENDENCIES/Arnold-5.4.0.2-linux'
+    USD_PATH='/home/migo/DEV_PROJECTS/WSRD/USD_dev'
+    USD_BUILD_MODE='shared_libs'
+    BOOST_INCLUDE='/home/migo/DEV_PROJECTS/WSRD/USD_dev/include'
+    PYTHON_INCLUDE='/usr/include/python2.7'
+    PYTHON_LIB='/usr/lib'
+    PYTHON_LIB_NAME='python2.7'
+    PREFIX='/home/migo/DEV_PROJECTS/WSRD/arnold-usd_dev'
+
+    sh abuild
+
+    Reference:https://blog.stevedoria.net/20180214/how-to-install-gcc-7-on-centos-7
+
+43. install / uninstall renderman
+    rpm -e RenderManProServer-19.0_linuxFC12_gcc44121.x86_64 <remove>
+    rpm -ivh RenderManProServer-19.0_linuxFC12_gcc44121.x86_64 <install>
+
+45. list packages
+    sudo yum list installed
+    rpm -qa | grep <packagename>, For example:rpm -qa | grep RenderMan
+
+46. 查看进程/删除进程
+    ps -aux
+    kill <processID>
+
+47. 安装docker
+    1.
+        $ curl -fsSL https://get.docker.com -o get-docker.sh
+        $ sudo sh get-docker.sh
+
+    2.
+    创建docker用户组
+        sudo groupadd docker
+    普通用户加入docker用户组
+        sudo usermod -aG docker ${用户名} 用root权限才有效
+    重启docker
+        sudo systemctl restart docker
+
+    3.
+    卸载docker
+        Uninstall the Docker package:
+        
+        $ sudo yum remove docker-ce
+        $ sudo rm -rf /var/lib/docker
+
+    Ref:https://docs.docker.com/install/linux/docker-ce/centos/
+
+48. docker 安装 tensorflow
+    1. 查看docker的版本
+        sudo docker version
+        如果要用GPU-Support的Tensorflow：
+            如果docker的版本是低于19.03，那么：
+                sudo docker run --runtime=nvidia -it --rm tensorflow/tensorflow:latest-gpu-py3 python
+            如果docker的版本是等于或高于19.03，那么：
+                sudo docker run --gpus all -it --rm tensorflow/tensorflow:latest-gpu-py3 python
+    2. 
+        Optional Features
+            -py3 images come with Python 3 (3.5 for Ubuntu 16-based images; 3.6 for Ubuntu 18-based images) instead of Python 2.7
+            -gpu tags are based on Nvidia CUDA. You need nvidia-docker to run them. NOTE: GPU versions of TensorFlow 1.13 and above (this includes the latest- tags) require an NVidia driver that supports CUDA 10. See NVidia's support matrix.
+            -jupyter tags include Jupyter and some TensorFlow tutorial notebooks.. They start a Jupyter notebook server on boot. Mount a volume to /tf/notebooks to work on your own notebooks.
+
+    3. GPU-Support 需要 Nvidia/CUDA
+        $ distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+        $ curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.repo | sudo tee /etc/yum.repos.d/nvidia-docker.repo
+
+        $ sudo yum install -y nvidia-container-toolkit
+        $ sudo systemctl restart docker
+        $ docker run --gpus all nvidia/cuda:latest nvidia-smi
+
+49. 远程登陆192.168.17.212<右边房间的电脑>
+    有team用户，root用户
+
+50. 安装/更新 Nvidia Driver
+    sh  NVIDIA-Linux-x86_64-430.40.run   -a -N --ui=none --no-kernel-module
+
+    rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+    // 以后可能会有更新，网址在这里：http://elrepo.org/tiki/tiki-index.php
+    rpm -Uvh https://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
+    yum install nvidia-detect.x86_64
+    yum install $(nvidia-detect)
+
+51.
+    docker commit -a "wuguohui@winsing.net" -m "Base CentOS7 image." d997a0e78b95 wsrd/centos7:base
+
+    docker save wsrd/centos7:base | gzip > wsrdCentOS7.tar.gz
+
+    systemctl daemon-reload
+
+52. docker 安装Houdini, USD, 显卡驱动
+    安装显卡驱动
+        sh  NVIDIA-Linux-x86_64-430.40.run   -a -N --ui=none --no-kernel-module
+    升级显卡驱动
+        rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+        // 以后可能会有更新，网址在这里：http://elrepo.org/tiki/tiki-index.php
+        rpm -Uvh https://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
+        yum install nvidia-detect.x86_64
+        yum install $(nvidia-detect)
+
+    REF：https://www.cnblogs.com/g2thend/p/11698903.html
+
+    # -----------
+    安装houdini后，先运行hkey，输入了已破解后的电脑IP，在运行Houdini
+    # docker houdini
+        yum install -y epel-release
+        yum update -y
+
+        yum -y install mesa-libGLw libXp gamin audiofile audiofile-devel e2fsprogs-libs xorg-x11-fonts-ISO8859-1-100dpi xorg-x11-fonts-ISO8859-1-75dpi liberation-mono-fonts liberation-fonts-common liberation-sans-fonts liberation-serif-fonts libpng12 libXScrnSaver alsa-lib libasound.so.2 libXcomposite libXtst pciutils-devel
+
+        yum -y install mesa* libx* libGLU* libXmu* 
+        yum install LibRaw
+        yum install libwebp
+
+        dbus-uuidgen > /var/lib/dbus/machine-id
+
+    # -----------
+    USD要将自生用到的lib64一起复制到USD文件夹内
+
+    docker run -ti --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --privileged=true --network host houdinidocker.latest /bin/bash
+
+
+    docker run -it --rm -e NVIDIA_VISIBLE_DEVICES=all -e NVIDIA_DRIVER_CAPABILITIES=all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --privileged=true --net host --gpus all centos:7
+
+    docker run -it --rm -e NVIDIA_VISIBLE_DEVICES=all -e NVIDIA_DRIVER_CAPABILITIES=all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --privileged=true --user wsrd --gpus all wsrd/centos7:v2 /bin/bash
+
+    docker run -it --rm -e NVIDIA_VISIBLE_DEVICES=all -e NVIDIA_DRIVER_CAPABILITIES=all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /usr/lib:/usr/lib -v /usr/lib64:/usr/lib64 --privileged=true --user wsrd --gpus all wsrd/centos7:v2 /bin/bash
+
+    paddlepaddle:
+        docker run -it --rm -e NVIDIA_VISIBLE_DEVICES=all -e NVIDIA_DRIVER_CAPABILITIES=all --gpus all paddlepaddle/paddle:1.6.0-gpu-cuda10.0-cudnn7 /bin/bash
+
+        docker run -it --rm -e NVIDIA_VISIBLE_DEVICES=all -e NVIDIA_DRIVER_CAPABILITIES=all --network host -v /home/migo/DEV_PROJECTS/WSRD/paddlepaddle/paddlepaddle/fruitDetection/PaddleDetection:/root/PaddleDetection --gpus all paddlepaddle/paddle:1.6.0-gpu-cuda10.0-cudnn7 /bin/bash
+
+53. docker command
+    1. 快速删除所有容器 docker rm -f ($docker ps -aq)
+    2. 创建网络 docker network create -d bridge my-network
+    3.
+
+54. 主题
+    sudo yum install gnome-tweak-tool
+    gnome-tweaks
+
+55. How to install android-studio in centos7
+    Reference: https://wpcademy.com/how-to-install-android-studio-on-centos-7/
+
+56. tensorboard 报错
+    Reference: https://blog.csdn.net/jinbeibei0606/article/details/100771997
