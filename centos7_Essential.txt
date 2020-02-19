@@ -530,8 +530,7 @@ pip
         - $ git clone https://github.com/llvm/llvm-project.git
         - $ cd llvm-project
         - $ mkdir build
-        - $ cmake -DLLVM_ENABLE_PROJECTS=clang -DLLVM_INSTALL_UTILS=ON 
-        - $ DCMAKE_INSTALL_PREFIX=/home/migo/DEV_PROJECTS/COMPILERFRAMEWORK/llvm -G "Unix Makefiles" ../llvm
+        - $ cmake -DLLVM_ENABLE_PROJECTS=clang -DLLVM_INSTALL_UTILS=ON -DCMAKE_INSTALL_PREFIX=/home/migo/DEV_PROJECTS/COMPILERFRAMEWORK/llvm -G "Unix Makefiles" ../llvm
         - $ make -j 8
         - $ make install
 

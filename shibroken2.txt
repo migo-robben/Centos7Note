@@ -1,0 +1,89 @@
+1.  安装或者编译获得llvm和clang
+    安装：（不过最后发现还是有些库会缺乏，还是使用编译的方法来获得llvm和clang）
+        sudo yum install centos-release-scl-rh
+        sudo yum install llvm-toolset-7-llvm-devel
+        sudo yum install llvm-toolset-7
+    编译：
+        git clone https://github.com/llvm/llvm-project.git
+        cd llvm-project
+        mkdir build
+        cmake -DLLVM_ENABLE_PROJECTS=clang -DLLVM_INSTALL_UTILS=ON -DCMAKE_INSTALL_PREFIX=/home/migo/DEV_PROJECTS/COMPILERFRAMEWORK/llvm -G "Unix Makefiles" ../llvm
+        -make -j8
+        -make install
+
+2.  pyside2的git仓库
+    git clone git://code.qt.io/pyside/pyside-setup.git
+    cd pyside-setup
+    git checkout 5.12.0
+    git submodule update --init
+
+3.  编译pyside的时候会用到opengl，所以先安装以下依赖库
+    yum install mesa-libGL-devel mesa-libGLU-devel
+
+3.  切换到python3环境后
+    python -m pip3 install virtualenvwrapper (use python3.7 env)
+
+4.  python -m pip3 install virtualenv (use python3.7 env)
+    sudo ln -s /home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.6/bin/virtualenv /usr/local/bin/virtualenv
+
+5.  virtualenvwrapper 环境配置
+    export WORKON_HOME="~/.virtualenvs"
+    export VIRTUALENVWRAPPER_PYTHON="/home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.6/bin/python3.7" (自己编译的那个python3.7)
+    source /home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.6/bin/virtualenvwrapper.sh
+
+6.  创建虚拟环境
+    mkvirtualenv pyside2build
+
+    附： virtualenvwrapper的使用
+    
+        # ----- 在物理环境下操作
+        # 创建并激活虚拟环境
+        mkvirtualenv 虚拟环境名
+
+        # 切换虚拟环境
+        workon 虚拟环境名
+
+        # 退出虚拟环境
+        deactivate
+
+        # 删除虚拟环境
+        rmvirtualenv 虚拟环境名
+
+        # 查看所有的虚拟环境
+        lsvirtualenv
+
+
+        # ----- 在虚拟环境下操作
+        # 切换到虚拟环境的目录
+        cdvirtualenv
+
+        # 切换到虚拟环境的site-packages目录
+        cdsitepackages
+
+        # 查看虚拟环境site-packages目录的文件
+        lssitepackages
+
+7.  此时应该是进入了virtualenv，若没有进入，输入workon pyside2build
+
+8.  在虚拟环境下运行 /home/migo/DEV_PROJECTS/COMPILERFRAMEWORK/llvm-7/bin/llvm-config --prefix， 得到 "/home/migo/DEV_PROJECTS/COMPILERFRAMEWORK/llvm-7"
+    
+    所以：
+    export LLVM_INSTALL_DIR="/home/migo/DEV_PROJECTS/COMPILERFRAMEWORK/llvm-7"
+    export LD_LIBRARY_PATH="/opt/Qt/5.12.7/gcc_64/lib/﻿:$LD_LIBRARY_PATH"
+    export PATH="/opt/Qt/5.12.7/gcc_64/bin/:$PATH"
+
+9.  编译pyside2
+    cd pyside-setup
+    python setup.py install --qmake=/opt/Qt/5.12.7/gcc_64/bin/qmake --jobs=8﻿
+
+10. 编译过后运行案例文件
+    mkdir build && cd build
+    cmake .. (有可能会cmake报错，说找不到FindQt5.cmake文件)
+    所以：
+    cmake -DCMAKE_PREFIX_PATH="/opt/Qt/5.12.7/gcc_64/lib/cmake/Qt5" ../
+    make install
+
+    会编译出Sboken2QtExample.so的动态库文件
+    运行python main.py就可以看到运行成功
+
+Reference:https://blog.basyskom.com/2019/using-shiboken2-to-create-python-bindings-for-a-qt-library/
