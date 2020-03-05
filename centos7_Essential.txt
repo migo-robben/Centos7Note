@@ -237,6 +237,8 @@ pip
 
     python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --draco --draco-location "/home/migo/DEV_PROJECTS/DEPENDENCIES/draco/" --materialx --ptex --openvdb ../../../WSRD/USD/
 
+    python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --materialx --ptex --openvdb --build ../../../WSRD/USD/build --src ../../../WSRD/USD/src --inst ../../../WSRD/USD/release
+
     python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --draco --draco-location "/home/migo/DEV_PROJECTS/DEPENDENCIES/draco/" --maya-location /usr/autodesk/maya2019 --maya --materialx --houdini-location /opt/hfs17.5.425 --houdini ../../../WSRD/USD/
 
 
@@ -748,3 +750,6 @@ pip
 
     本地
     8. git clone ssh://root@192.168.17.140/mnt/wd_hdd1_2t/DevOp/Linux/wsrd_pipeline_test
+
+59. pxr opensubdiv
+    python build_osd.py --tests --ptex --tbb --omp --opencl --directx --build ../../../WSRD/OpenSubdiv/build --src ../../../WSRD/OpenSubdiv/src ../../../WSRD/OpenSubdiv/release
