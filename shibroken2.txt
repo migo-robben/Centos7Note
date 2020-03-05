@@ -14,7 +14,7 @@
 2.  pyside2的git仓库
     git clone git://code.qt.io/pyside/pyside-setup.git
     cd pyside-setup
-    git checkout 5.12.0
+    git checkout 5.12.6
     git submodule update --init
 
 3.  编译pyside的时候会用到opengl，所以先安装以下依赖库

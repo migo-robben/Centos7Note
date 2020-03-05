@@ -179,7 +179,14 @@ pip
     source /etc/profile，让系统配置文件生效的命令
 
 14.安装maya
-    方法1：参考https://knowledge.autodesk.com/support/maya/troubleshooting/caas/CloudHelp/cloudhelp/2019/ENU/Installation-Maya/files/GUID-E7E054E1-0E32-4B3C-88F9-BF820EB45BE5-htm.html
+    依赖库：
+        yum -y install mesa-libGLw mesa-libGLU libXp gamin audiofile audiofile-devel e2fsprogs-libs xorg-x11-fonts-ISO8859-1-100dpi xorg-x11-fonts-ISO8859-1-75dpi liberation-mono-fonts liberation-fonts-common liberation-sans-fonts liberation-serif-fonts
+
+    方法1：参考
+        https://knowledge.autodesk.com/support/maya/troubleshooting/caas/CloudHelp/cloudhelp/2019/ENU/Installation-Maya/files/GUID-E7E054E1-0E32-4B3C-88F9-BF820EB45BE5-htm.html
+
+        https://knowledge.autodesk.com/support/maya/troubleshooting/caas/CloudHelp/cloudhelp/2019/ENU/Installation-Maya/files/GUID-D2B5433C-E0D2-421B-9BD8-24FED217FD7F-htm.html
+        
         其中/usr/autodesk/maya2019/bin/adlmreg -i S 657k1 657k1 2019.0.0.F 562-98932138 /var/opt/Autodesk/Adlm/Maya2019/MayaConfig.pit
 
     方法2：解压maya的安装包，运行./setup
@@ -188,6 +195,8 @@ pip
     就yum -y install libGLU
 
     maya2018 tiff.so.3 error, sudo yum install compat-libtiff3
+
+    http://help.autodesk.com/view/MAYAUL/2020/ENU/?guid=GUID-E7E054E1-0E32-4B3C-88F9-BF820EB45BE5
 
 15.登陆140
     ssh root@192.168.17.140 密码：wsrdcentfs2020
@@ -224,7 +233,9 @@ pip
         $ export "KATANA_API_LOCATION=/opt/Katana3.1v4/"
     
     编译不过尝试用root权限：
-    python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --draco --draco-location "/home/migo/DEV_PROJECTS/DEPENDENCIES/draco/" --materialx --ptex ../../../WSRD/USD/
+    python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --materialx --ptex --openvdb ../../../WSRD/USD/
+
+    python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --draco --draco-location "/home/migo/DEV_PROJECTS/DEPENDENCIES/draco/" --materialx --ptex --openvdb ../../../WSRD/USD/
 
     python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --draco --draco-location "/home/migo/DEV_PROJECTS/DEPENDENCIES/draco/" --maya-location /usr/autodesk/maya2019 --maya --materialx --houdini-location /opt/hfs17.5.425 --houdini ../../../WSRD/USD/
 
@@ -669,9 +680,7 @@ pip
 
         yum -y install mesa-libGLw libXp gamin audiofile audiofile-devel e2fsprogs-libs xorg-x11-fonts-ISO8859-1-100dpi xorg-x11-fonts-ISO8859-1-75dpi liberation-mono-fonts liberation-fonts-common liberation-sans-fonts liberation-serif-fonts libpng12 libXScrnSaver alsa-lib libasound.so.2 libXcomposite libXtst pciutils-devel
 
-        yum -y install mesa* libx* libGLU* libXmu* 
-        yum install LibRaw
-        yum install libwebp
+        yum -y install mesa* libx* libGLU* libXmu* LibRaw libwebp
 
         dbus-uuidgen > /var/lib/dbus/machine-id
 
@@ -706,3 +715,36 @@ pip
 
 56. tensorboard 报错
     Reference: https://blog.csdn.net/jinbeibei0606/article/details/100771997
+
+57. docker maya 2020
+    docker run -itd --name maya -e NVIDIA_VISIBLE_DEVICES=all -e NVIDIA_DRIVER_CAPABILITIES=all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /usr/lib:/usr/lib -v /usr/lib64:/usr/lib64 --network host --gpus all --privileged=true centos:7.7.1908 /usr/sbin/init
+
+    docker 环境下：
+        yum -y install mesa-libGLw mesa-libGLU libXp gamin audiofile audiofile-devel e2fsprogs-libs xorg-x11-fonts-ISO8859-1-100dpi xorg-x11-fonts-ISO8859-1-75dpi liberation-mono-fonts liberation-fonts-common liberation-sans-fonts liberation-serif-fonts libgtk* libgomp* libXpm* libpk-gtk-module* libcanberra-gtk-module*
+
+    Reference:
+        http://help.autodesk.com/view/MAYAUL/2020/ENU/?guid=GUID-E7E054E1-0E32-4B3C-88F9-BF820EB45BE5
+
+58. Git 140的仓库
+    1. ssh root@192.168.17.140 password:wsrdcentfs2020
+    2. cd /mnt/wd_hdd1_2t/DevOp/Linux
+    3. mkdir wsrd_pipeline_test
+    4. cp -r wsrd_pipeline/houdini/ wsrd_pipeline_test/houdini/ && cd wsrd_pipeline_test
+    5. git init
+    6. touch test.txt && echo "Example" > test.txt
+    7. git commit -m "Example"
+
+    如果有报错，在服务器的wsrd_pipeline_test目录下，修改.git/hooks/post-update.sample，将该文件后缀删除，变为post-update，post-update
+    {
+        git config --global receive.denyCurrentBranch ignore
+        修改根仓库.git/hooks/post-update.sample，在最后添加
+        {   
+            #exec git update-server-info
+            unset GIT_DIR
+            cd ..
+            git checkout -f
+        }
+    }
+
+    本地
+    8. git clone ssh://root@192.168.17.140/mnt/wd_hdd1_2t/DevOp/Linux/wsrd_pipeline_test
