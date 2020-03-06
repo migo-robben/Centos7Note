@@ -332,6 +332,8 @@ pip
     用root /opt/Qt
     用sudo /home/migo/Qt
 
+    sudo ln -s /opt/Qt/Tools/QtCreator/bin/qtcreator /usr/local/bin/qtcreator
+
 23.安装UnrealEngine
     References：
         https://wiki.unrealengine.com/Building_On_Centos
@@ -748,8 +750,21 @@ pip
         }
     }
 
+    Reference:
+        https://blog.csdn.net/github_36878269/article/details/80967388
+
     本地
     8. git clone ssh://root@192.168.17.140/mnt/wd_hdd1_2t/DevOp/Linux/wsrd_pipeline_test
 
 59. pxr opensubdiv
     python build_osd.py --tests --ptex --tbb --omp --opencl --directx --build ../../../WSRD/OpenSubdiv/build --src ../../../WSRD/OpenSubdiv/src ../../../WSRD/OpenSubdiv/release
+
+60. houdini print message in linux
+    # ----- Open terminal ----- #
+    gnome-terminal -- /opt/hfs18.0.391/bin/houdinifx -foreground waitforui
+
+    std::cout << "Example " << std::endl;
+    std::cout.flush();
+
+    Reference:
+        http://www.deborahrfowler.com/C++Resources/HDK/sopPointCreate/sopPointCreate.C
