@@ -761,10 +761,15 @@ pip
 
 60. houdini print message in linux
     # ----- Open terminal ----- #
-    gnome-terminal -- /opt/hfs18.0.391/bin/houdinifx -foreground waitforui
+    gnome-terminal -- /opt/hfs18.0.401/bin/houdinifx -foreground waitforui
 
     std::cout << "Example " << std::endl;
     std::cout.flush();
 
     Reference:
         http://www.deborahrfowler.com/C++Resources/HDK/sopPointCreate/sopPointCreate.C
+
+61. kb5YwdWPAYZK
+
+62.
+rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DRAPIDJSON_ROOT="/home/migo/DEV_PROJECTS/WSRD/rapidjson" ../ && cmake --build . --config Release --clean-first && gnome-terminal -- /opt/hfs18.0.401/bin/houdinifx -foreground waitforui
