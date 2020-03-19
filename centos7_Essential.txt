@@ -237,7 +237,7 @@ pip
 
     python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --draco --draco-location "/home/migo/DEV_PROJECTS/DEPENDENCIES/draco/" --materialx --ptex --openvdb ../../../WSRD/USD/
 
-    python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --materialx --ptex --openvdb --build ../../../WSRD/USD/build --src ../../../WSRD/USD/src --inst ../../../WSRD/USD/release
+    python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --materialx --ptex --openvdb --build ../../../WSRD/USD/build --src ../../../WSRD/USD/src ../../../WSRD/USD/release
 
     python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --draco --draco-location "/home/migo/DEV_PROJECTS/DEPENDENCIES/draco/" --maya-location /usr/autodesk/maya2019 --maya --materialx --houdini-location /opt/hfs17.5.425 --houdini ../../../WSRD/USD/
 
@@ -352,19 +352,19 @@ pip
 
 26.安装python3.7
     ||==== Python ====||
-    install Python 3.7.5:
+    install Python 3.7.6:
         - install the following dependencies prior to install Python3.7
         - $ yum -y install openssl-devel libffi-devel
         - $ cd /home/predator/Downloads/
-        - $ wget https://www.python.org/ftp/python/3.7.5/Python-3.7.5.tgz
-        - $ tar xzf Python-3.7.5.tgz
-        - $ cd Python-3.7.5/
-        - $ ./configure --enable-shared --enable-optimizations --prefix=/home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.5
-        (先运行./configure --enable-optimizations --prefix=/home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.5，
+        - $ wget https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tgz
+        - $ tar xzf Python-3.7.6.tgz
+        - $ cd Python-3.7.6/
+        - $ ./configure --enable-shared --enable-optimizations --prefix=/home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.6
+        (先运行./configure --enable-optimizations --prefix=/home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.6，
          
-         再运行./configure --enable-shared --prefix=/home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.5_shared,
+         再运行./configure --enable-shared --prefix=/home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.6_shared,
          
-         然后将Python3.7.5_shared中的.so动态库移动到Python3.7.5的lib中)
+         然后将Python3.7.6_shared中的.so动态库移动到Python3.7.6的lib中)
         - $ make altinstall   //avoid overwriting the OS built-in Python2.7
 
     Switch Python 3.7 as default Python
@@ -372,7 +372,7 @@ pip
         - $ alternatives --install /usr/bin/python python /usr/local/bin/python3.7 60
         - $ alternatives --install /usr/bin/python python /usr/bin/python2 50
         - $ alternatives --config python          //select the desired version of Python
-        PS: ----- > export "LD_LIBRARY_PATH=/home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.5/lib"
+        PS: ----- > export "LD_LIBRARY_PATH=/home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.6/lib"
         - need to switch back to the built-in Python 2 when using "yum" command
 
     Switch pip3.7 as default pip 
@@ -401,7 +401,7 @@ pip
     ./bootstrap.sh --prefix=/home/migo/DEV_PROJECTS/DEPENDENCIES/boost_1_70_0 --with-python=/usr/local/bin/python3.7 --with-python-version=3.7 --with-python-root=-with-python-root=/usr/local/lib
 
     vim user-config.jam
-        using python : 3.7 : /home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.5/bin/python3.7 : /home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.5/include/python3.7m : /home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.5/lib ;
+        using python : 3.7 : /home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.6/bin/python3.7 : /home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.6/include/python3.7m : /home/migo/DEV_PROJECTS/APPLICATIONS/Python3.7.6/lib ;
         
     ./b2 --prefix="/home/migo/DEV_PROJECTS/DEPENDENCIES/boost_1_70_0" address-model=64 variant=release threading=multi link=shared --user-config=user-config.jam --with-python install
 
@@ -563,7 +563,7 @@ pip
     cmake --build . --config Release --clean-first --target install -- -j8
 
     # use build script
-    python build.py "/home/migo/DEV_PROJECTS/WSRD/maya-usd" --install-location "/home/migo/DEV_PROJECTS/WSRD/maya-usd" --build-release --pxrusd-location "/home/migo/DEV_PROJECTS/WSRD/USD_v19.05" --maya-location "/usr/autodesk/maya2019"
+    python build.py "/home/migo/DEV_PROJECTS/WSRD/maya-usd" --install-location "/home/migo/DEV_PROJECTS/WSRD/maya-usd/Release" --build-release --pxrusd-location "/home/migo/DEV_PROJECTS/WSRD/USD/release" --maya-location "/usr/autodesk/maya2020" -j 8
     注意：用-j8编译不通过所以，不要用多线程编译
 
 42. How to Install GCC 7 on CentOS 7 - Autodesk arnold-usd
@@ -576,14 +576,15 @@ pip
         scl enable rh-python36 bash
 
     MODE='opt'
-    ARNOLD_PATH='/home/migo/DEV_PROJECTS/DEPENDENCIES/Arnold-5.4.0.2-linux'
-    USD_PATH='/home/migo/DEV_PROJECTS/WSRD/USD_dev'
+    ARNOLD_PATH='/home/migo/DEV_PROJECTS/WSRD/Arnold-6.0.2.1-linux'
+    USD_PATH='/home/migo/DEV_PROJECTS/WSRD/USD/release'
     USD_BUILD_MODE='shared_libs'
-    BOOST_INCLUDE='/home/migo/DEV_PROJECTS/WSRD/USD_dev/include'
+    BOOST_INCLUDE='/home/migo/DEV_PROJECTS/WSRD/USD/release/include'
     PYTHON_INCLUDE='/usr/include/python2.7'
     PYTHON_LIB='/usr/lib'
     PYTHON_LIB_NAME='python2.7'
-    PREFIX='/home/migo/DEV_PROJECTS/WSRD/arnold-usd_dev'
+    PREFIX='/home/migo/DEV_PROJECTS/WSRD/arnold-usd'
+    custom.py
 
     sh abuild
 
@@ -772,4 +773,4 @@ pip
 61. kb5YwdWPAYZK
 
 62.
-rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DRAPIDJSON_ROOT="/home/migo/DEV_PROJECTS/WSRD/rapidjson" ../ && cmake --build . --config Release --clean-first && gnome-terminal -- /opt/hfs18.0.401/bin/houdinifx -foreground waitforui
+rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DOPENSUBDIVLIB="/home/migo/DEV_PROJECTS/WSRD/OpenSubdiv/release" -DRAPIDJSON_ROOT="/home/migo/DEV_PROJECTS/WSRD/rapidjson" ../ && cmake --build . --config Release --clean-first && gnome-terminal -- /opt/hfs18.0.401/bin/houdinifx -foreground waitforui
