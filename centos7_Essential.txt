@@ -774,3 +774,16 @@ pip
 
 62.
 rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DOPENSUBDIVLIB="/home/migo/DEV_PROJECTS/WSRD/OpenSubdiv/release" -DRAPIDJSON_ROOT="/home/migo/DEV_PROJECTS/WSRD/rapidjson" ../ && cmake --build . --config Release --clean-first && gnome-terminal -- /opt/hfs18.0.401/bin/houdinifx -foreground waitforui
+
+63. OpenGL
+    GLFW:
+        git clone https://github.com/glfw/glfw.git
+        cd glfw
+        mkdir build && cd build
+        cmake -DCMAKE_INSTALL_PREFIX="/home/migo/DEV_PROJECTS/WSRD/glfw" -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=ON -DGLFW_BUILD_TESTS=ON "/home/migo/CLionProjects/glfw"
+    
+    GLAD:
+        https://glad.dav1d.de/
+
+    查看OpenGL版本：
+        glxinfo | grep "OpenGL version"
