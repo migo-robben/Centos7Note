@@ -787,3 +787,11 @@ rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DOPENSUBDIVLIB="/home/migo/DEV_P
 
     查看OpenGL版本：
         glxinfo | grep "OpenGL version"
+
+64. assimp
+    git clone https://github.com/assimp/assimp.git
+    mkdir build
+    cd build
+    cmake -DCMAKE_INSTALL_PREFIX="/home/migo/DEV_PROJECTS/WSRD/assimp" ../
+    make -j8
+    make install
