@@ -795,3 +795,67 @@ rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DOPENSUBDIVLIB="/home/migo/DEV_P
     cmake -DCMAKE_INSTALL_PREFIX="/home/migo/DEV_PROJECTS/WSRD/assimp" ../
     make -j8
     make install
+
+65. CUDA
+    1. wget https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/cuda-repo-rhel7-10.2.89-1.x86_64.rpm
+    2. sudo rpm -i cuda-repo-rhel7-10.2.89-1.x86_64.rpm
+    3. yum install cuda
+    4. Open the ~/.bashrc using your preferred text editor and add the following two lines:
+        export PATH=/usr/local/cuda/bin:$PATH
+        export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+    5. source ~/.bashrc
+    6. nvcc --version 
+       nvidia-smi
+
+66. OBS
+    sudo yum install \
+         make \
+         gcc \
+         gcc-c++ \
+         gcc-objc \
+         cmake \
+         git \
+         libX11-devel \
+         mesa-libGL-devel \
+         libv4l-devel \
+         pulseaudio-libs-devel \
+         libspeexdsp-devel \
+         x264-devel \
+         freetype-devel \
+         fontconfig-devel \
+         libXcomposite-devel \
+         libXinerama-devel \
+         qt5-qtbase-devel \
+         qt5-qtx11extras-devel \
+         qt5-qtsvg-devel \
+         libcurl-devel \
+         systemd-devel \
+         ffmpeg \
+         ffmpeg-devel \
+         luajit-devel \
+         python3-devel \
+         mbedtls \
+         mbedtls-devel \
+         swig
+
+    If building with browser source:
+         wget https://cdn-fastly.obsproject.com/downloads/cef_binary_3770_linux64.tar.bz2
+         tar -xjf ./cef_binary_3770_linux64.tar.bz2
+
+    git clone --recursive https://github.com/obsproject/obs-studio.git
+    cd obs-studio
+    mkdir build && cd build
+
+    Without browser source:
+              cmake -DUNIX_STRUCTURE=1 ..
+    With browser source:
+              cmake -DUNIX_STRUCTURE=1 -DBUILD_BROWSER=ON -DCEF_ROOT_DIR="../../cef_binary_3770_linux64" ..
+
+    make -j4
+    sudo make install
+
+    By default obs installs libraries in /usr/local/lib. To make sure that the loader can find them there, create a file /etc/ld.so.conf.d/local.conf with the single line
+    /usr/local/lib
+
+    Reference:
+        https://obsproject.com/wiki/install-instructions#linux
