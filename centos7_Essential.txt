@@ -859,3 +859,6 @@ rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DOPENSUBDIVLIB="/home/migo/DEV_P
 
     Reference:
         https://obsproject.com/wiki/install-instructions#linux
+
+67. clion crack
+    License server:http://fls.jetbrains-agent.com
