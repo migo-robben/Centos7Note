@@ -888,3 +888,13 @@ rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DOPENSUBDIVLIB="/home/migo/DEV_P
     conda config --set auto_activate_base false
 
     Thank you for installing Anaconda3!
+
+    launch conda env:
+        conda activate <env_name>
+
+70. pycharm
+    Commit Ctrl+K
+
+    Commit and Push Ctrl+Alt+K
+
+    Push Ctrl+Shift+K
