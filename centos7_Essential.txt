@@ -563,7 +563,7 @@ pip
     cmake --build . --config Release --clean-first --target install -- -j8
 
     # use build script
-    python build.py "/home/migo/DEV_PROJECTS/WSRD/maya-usd" --install-location "/home/migo/DEV_PROJECTS/WSRD/maya-usd/Release" --build-release --pxrusd-location "/home/migo/DEV_PROJECTS/WSRD/USD/release" --maya-location "/usr/autodesk/maya2020" -j 8
+    python build.py "/home/migo/DEV_PROJECTS/WSRD/maya-usd" --install-location "/home/migo/DEV_PROJECTS/WSRD/maya-usd/release" --build-release --pxrusd-location "/home/migo/DEV_PROJECTS/WSRD/USD/release" --devkit-location "/usr/autodesk/maya/devkit/devkitBase" --maya-location "/usr/autodesk/maya2020" -j 8
     注意：用-j8编译不通过所以，不要用多线程编译
 
 42. How to Install GCC 7 on CentOS 7 - Autodesk arnold-usd
@@ -862,3 +862,29 @@ rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DOPENSUBDIVLIB="/home/migo/DEV_P
 
 67. clion crack
     License server:http://fls.jetbrains-agent.com
+
+68.
+    git push ssh://root@192.168.17.140/srv/wsrd_pipeline.git master wsrdcentfs2020
+
+69. Anconda
+    no change     /home/migo/anaconda3/condabin/conda
+    no change     /home/migo/anaconda3/bin/conda
+    no change     /home/migo/anaconda3/bin/conda-env
+    no change     /home/migo/anaconda3/bin/activate
+    no change     /home/migo/anaconda3/bin/deactivate
+    no change     /home/migo/anaconda3/etc/profile.d/conda.sh
+    no change     /home/migo/anaconda3/etc/fish/conf.d/conda.fish
+    no change     /home/migo/anaconda3/shell/condabin/Conda.psm1
+    no change     /home/migo/anaconda3/shell/condabin/conda-hook.ps1
+    no change     /home/migo/anaconda3/lib/python3.7/site-packages/xontrib/conda.xsh
+    no change     /home/migo/anaconda3/etc/profile.d/conda.csh
+    modified      /home/migo/.bashrc
+
+    ==> For changes to take effect, close and re-open your current shell. <==
+
+    If you'd prefer that conda's base environment not be activated on startup, 
+       set the auto_activate_base parameter to false: 
+
+    conda config --set auto_activate_base false
+
+    Thank you for installing Anaconda3!
