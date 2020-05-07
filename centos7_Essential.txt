@@ -898,3 +898,10 @@ rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DOPENSUBDIVLIB="/home/migo/DEV_P
     Commit and Push Ctrl+Alt+K
 
     Push Ctrl+Shift+K
+
+71. Osd_OpenGL
+    cmake flags:
+    -DOPENSUBDIV_INCLUDE_DIR="/home/migo/DEV_PROJECTS/WSRD/OpenSubdiv/release/include"
+    -DOPENSUBDIV_ROOT_DIR="/home/migo/DEV_PROJECTS/WSRD/OpenSubdiv/release"
+    -DGLFW_LOCATION=/home/migo/DEV_PROJECTS/WSRD/OpenSubdiv/release
+    "/home/migo/CLionProjects/Osd_OpenGL"
