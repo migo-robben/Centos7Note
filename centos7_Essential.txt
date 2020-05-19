@@ -416,7 +416,7 @@ pip
 
     ./bootstrap.sh --prefix=/home/migo/DEV_PROJECTS/WSRD/boost_1_64_0
     
-    ./b2 --prefix="/home/migo/DEV_PROJECTS/WSRD/boost_1_64_0" address-model=64 variant=release threading=multi link=shared --with-python --with-atomic --with-program_options --with-rgex --with-date_time --with-thread --with-iostreams --with-filesystem install
+    ./b2 --prefix="/home/migo/DEV_PROJECTS/WSRD/boost_1_64_0" address-model=64 variant=release threading=multi link=shared --with-python --with-atomic --with-program_options --with-regex --with-date_time --with-thread --with-iostreams --with-filesystem install
 
 
 28.draco

@@ -1,0 +1,10 @@
+#usda 1.0
+
+over "pSphere"
+{
+	float xformOp:rotateY:spin.timeSamples = {
+        1: 0,
+        240: 720,
+    }
+    uniform token[] xformOpOrder = ["xformOp:rotateY:spin"]
+}

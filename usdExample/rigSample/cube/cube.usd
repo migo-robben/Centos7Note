@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    upAxis = "Y"
+    defaultPrim = "cubeGroup"
+)
+
+def SkelRoot "cubeGroup" (
+    prepend apiSchemas = ["SkelBindingAPI"]
+    variants = {
+        string geometricLOD = "full"
+    }
+    prepend variantSets = ["geometricLOD"]
+)
+{
+    uniform bool doubleSided = 1
+    matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+    uniform token[] xformOpOrder = ["xformOp:transform"]
+
+    variantSet "geometricLOD" = {
+        "full" (
+            prepend references = @./assets/cube.full.usd@
+        ) {
+
+        }
+        "low" (
+            prepend references = @./assets/cube.low.usd@
+        ) {
+
+        }
+        "medium" (
+            prepend references = @./assets/cube.medium.usd@
+        ) {
+
+        }
+    }
+}
