@@ -656,6 +656,11 @@ pip
     有team用户，root用户
 
 50. 安装/更新 Nvidia Driver
+    如果要stop x server:
+        sudo systemctl stop gdm
+    之后再
+        sudo systemctl restart gdm
+    又可能要yum update
     sh  NVIDIA-Linux-x86_64-430.40.run   -a -N --ui=none --no-kernel-module
 
     rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
