@@ -1,0 +1,29 @@
+@echo off
+
+set /p set_or_unset="Config Git Proxy > 1 : Set Proxy | 2 : UnSet Proxy:  "
+
+if %set_or_unset% == 1 (
+
+    set /p socks_or_http="Set Socks5 or Http(s) Proxy > 1 : Socks5 | 2 : Http(s):  "
+
+    if %socks_or_http% == 1 (
+        set /p port="Port Number:  "
+        git config --global http.proxy socks5://127.0.0.1:%port%
+        git config --global https.proxy socks5://127.0.0.1:%port%
+    )
+    if %socks_or_http% == 2 (
+        set /p port="Port Number:  "
+        git config --global http.proxy http://127.0.0.1:%port%
+        git config --global https.proxy https://127.0.0.1:%port%
+    )
+
+) else (
+    git config --global --unset
+)
+
+pause
+
+
+
+rem git config --global http.proxy socks5://127.0.0.1:10808
+rem git config --global https.proxy socks5://127.0.0.1:10808
