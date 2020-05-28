@@ -916,3 +916,8 @@ rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DOPENSUBDIVLIB="/home/migo/DEV_P
     -DOPENSUBDIV_ROOT_DIR="/home/migo/DEV_PROJECTS/WSRD/OpenSubdiv/release"
     -DGLFW_LOCATION=/home/migo/DEV_PROJECTS/WSRD/OpenSubdiv/release
     "/home/migo/CLionProjects/Osd_OpenGL"
+
+72. windows10，安装centos7，导致windows10引导消失
+    yum install fuse ntfs-3g -y
+    grub2-mkconfig -o /boot/grub2/grub.cfg
+    reboot
