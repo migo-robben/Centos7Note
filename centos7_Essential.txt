@@ -921,3 +921,7 @@ rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DOPENSUBDIVLIB="/home/migo/DEV_P
     yum install fuse ntfs-3g -y
     grub2-mkconfig -o /boot/grub2/grub.cfg
     reboot
+
+73. windows10 set proxy
+	set https_proxy=socks5://127.0.0.1:10808
+	set http_proxy=socks5://127.0.0.1:10808 
