@@ -14,3 +14,5 @@ print prop
 chair_asset.set_editor_property("lod_for_occluder_mesh", 1)
 prop = chair_asset.get_editor_property("lod_for_occluder_mesh")
 print prop
+
+unreal.log("hello")
