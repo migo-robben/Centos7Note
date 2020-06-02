@@ -219,12 +219,19 @@ void AFloatActor::CreateStaticMesh_Description() {
 
 	// Polygons
 	{	
-		TArray<int32> FaceCounts{ 3, 3, 3, 3 };
-		TArray<int32> FaceIndices{ 1, 3, 0, 0, 2, 1, 3, 2, 0, 1, 2, 3 };
-
 		TArray<FVertexInstanceID> CornerInstanceIDs;
 		TArray<FVertexID> CornerVerticesIDs;
 		int32 CurrentVertexInstanceIndex = 0;
+
+		// Set Attribute Value
+		TArray<int32> FaceCounts{ 3, 3, 3, 3 };
+		TArray<int32> FaceIndices{ 1, 3, 0, 0, 2, 1, 3, 2, 0, 1, 2, 3 };
+		TArray<FVector2D> UVVector{ FVector2D(0.0, 0.0), FVector2D(1, 0), FVector2D(0.5, 1),
+									FVector2D(0.0, 0.0), FVector2D(1, 0), FVector2D(0.5, 1),
+									FVector2D(0.0, 0.0), FVector2D(1, 0), FVector2D(0.5, 1),
+									FVector2D(0.0, 0.0), FVector2D(1, 0), FVector2D(0.5, 1) };
+
+		TVertexInstanceAttributesRef< FVector2D > MeshDescriptionUVs = StaticMeshAttributes.GetVertexInstanceUVs();
 
 		MeshDescription->ReserveNewVertexInstances(FaceCounts.Num() * 3);
 		MeshDescription->ReserveNewPolygons(FaceCounts.Num());
@@ -258,6 +265,8 @@ void AFloatActor::CreateStaticMesh_Description() {
 
 				FVertexInstanceID AddedVertexInstanceId = MeshDescription->CreateVertexInstance(VertexID);
 				CornerInstanceIDs.Add(AddedVertexInstanceId);
+
+				MeshDescriptionUVs.Set(AddedVertexInstanceId, 0, UVVector[CurrentVertexInstanceIndex]);
 			}
 
 			FPolygonGroupID NewPolygonGroup = MeshDescription->CreatePolygonGroup();
