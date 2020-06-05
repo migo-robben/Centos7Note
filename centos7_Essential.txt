@@ -873,6 +873,8 @@ rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DOPENSUBDIVLIB="/home/migo/DEV_P
 
 67. clion crack
     License server:http://fls.jetbrains-agent.com
+    	ref:https://www.jianshu.com/p/d9e9161bf54f
+    		https://mp.weixin.qq.com/s/ayIzGQoIm_UCe-e0LdFhmw
 
 68.
     git push ssh://root@192.168.17.140/srv/wsrd_pipeline.git master wsrdcentfs2020
