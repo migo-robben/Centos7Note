@@ -572,6 +572,9 @@ pip
     python build.py "/home/migo/DEV_PROJECTS/WSRD/maya-usd" --install-location "/home/migo/DEV_PROJECTS/WSRD/maya-usd/release" --build-release --pxrusd-location "/home/migo/DEV_PROJECTS/WSRD/USD/release" --devkit-location "/usr/autodesk/maya/devkit/devkitBase" --maya-location "/usr/autodesk/maya2020" -j 8
     注意：用-j8编译不通过所以，不要用多线程编译
 
+    # windows need python jinjia2
+    python build.py "E:/DEV_PROJECTS/GIT/maya-usd" --install-location "E:/DEV_PROJECTS/WSRD/maya-usd/release" --build-release --pxrusd-location "E:/DEV_PROJECTS/WSRD/USD/release" --devkit-location "C:/Program Files/Autodesk/Maya2020/devkit/devkitBase" --maya-location "C:/Program Files/Autodesk/Maya2020" -j 8
+
 42. How to Install GCC 7 on CentOS 7 - Autodesk arnold-usd
     # usd custom compile gcc can not work, so use following to install GCC 7.3.1
         # yum install centos-release-scl
@@ -927,3 +930,15 @@ rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DOPENSUBDIVLIB="/home/migo/DEV_P
 73. windows10 set proxy
 	set https_proxy=socks5://127.0.0.1:10808
 	set http_proxy=socks5://127.0.0.1:10808
+
+74. conda
+    conda create --name myenv
+    conda activate myenv
+    conda remove --name  myenv --all
+    conda deactivate
+    conda remove --name myenv numpy (remove package)
+
+75. 编译PySide2
+    https://robscode.onl/docker-run-gui-app-in-linux-container-on-windows-host/
+    WindowsDocker RUN GUI APP: https://robscode.onl/docker-run-gui-app-in-linux-container-on-windows-host/
+    PySide2 PyBind Windows: https://www.cnblogs.com/opencascade/p/PySide.html
