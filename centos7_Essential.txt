@@ -942,3 +942,9 @@ rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DOPENSUBDIVLIB="/home/migo/DEV_P
     https://robscode.onl/docker-run-gui-app-in-linux-container-on-windows-host/
     WindowsDocker RUN GUI APP: https://robscode.onl/docker-run-gui-app-in-linux-container-on-windows-host/
     PySide2 PyBind Windows: https://www.cnblogs.com/opencascade/p/PySide.html
+
+    git submodule update --init --recursive # 可能会出错
+    手动克隆pyside2-tools到source/pyside2-tools即可
+    git clone https://github.com/pyside/pyside2-tools.git
+
+    python setup.py install --ignore-git --qmake=C:\Qt\5.13.2\msvc2017_64\bin\qmake.exe --openssl="C:\OpenSSL-Win64\bin" --cmake="C:\Qt\Tools\CMake_64\bin\cmake.exe"

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*- 
 
-# Import socket module 
 import socket
+import struct
+import sys
 import pickle
 import pickle_test as pk
 
@@ -11,29 +12,42 @@ obj.name = "Migo"
 obj.setPhoneNumber("555-1234")
 
 # ----- args list ----- #
-args = [5, 5]
+args = [5, 3]
 
 # Create a socket object 
-s = socket.socket()
+socket_client = socket.socket()
   
 # Define the port on which you want to connect 
 port = 12345
 
 # connect to the server on local computer 
-s.connect(('127.0.0.1', port))
+socket_client.connect(('127.0.0.1', port))
 
 # ----- pickle data ----- #
 # data = pickle.dumps(obj)
-# s.send(data)
+# socket_client.send(data)
 
 # ----- string ----- #
-# s.send('Hello World')
+# socket_client.send('Hello World')
 
 # ----- function args ----- #
-data = pickle.dumps(args)
-s.send(data)
+# data = pickle.dumps(args)
+# socket_client.send(data)
+
+# ----- send struct package ----- #
+msg     = "Hello World, Hello Migo"
+package = None
+if sys.byteorder == 'little':
+	package = struct.pack('<I', len(msg))
+else:
+	package = struct.pack('>I', len(msg))
+send_msg = ''.join([package, msg])
+print send_msg
+socket_client.send(send_msg)
+
 
 # receive data from the server 
-print s.recv(1024) 
+print socket_client.recv(1024) 
+
 # close the connection 
-s.close()
+socket_client.close()

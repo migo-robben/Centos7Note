@@ -1,67 +1,83 @@
-# first of all import the socket library 
+# -*- coding: utf-8 -*-
+
 import socket
 import pickle
-import pickle_test as pk
+import struct
+import sys
 import multiprocessing
 import random
 
 def func(a, b):
 	print "{} + {} = {}".format(a, b, a+b)
-	return a*b
+	return a+b
 
 def createFile(count):
 	for i in range(count):
-		with open("demo/demo_"+str(i)+".txt", "w") as f:
+		with open("demo/demo_"+str(random.randint(0, 168))+".txt", "w") as f:
 			for j in range(600000):
 				f.write(str(random.randint(0, 4294967295)) + '\n')
 
-# next create a socket object 
-s = socket.socket()
-print "Socket successfully created"
+if __name__ == "__main__":
+	# next create a socket object
+	socket_server = socket.socket()
+	socket_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-# reserve a port on your computer in our 
-# case it is 12345 but it can be anything 
-port = 12345
+	print "Socket successfully created"
 
-# Next bind to the port
-# we have not typed any ip in the ip field
-# instead we have inputted an empty string
-# this makes the server listen to requests
-# coming from other computers on the network
-s.bind(('', port))
-print "socket binded to %s" %(port)
-  
-# put the socket into listening mode
-s.listen(5)
-print "socket is listening"
+	# reserve a port on your computer in our
+	# case it is 12345 but it can be anything
+	port = 12345
 
-# a forever loop until we interrupt it or
-# an error occurs
-while True:
+	# Next bind to the port
+	# we have not typed any ip in the ip field
+	# instead we have inputted an empty string
+	# this makes the server listen to requests
+	# coming from other computers on the network
+	socket_server.bind(('', port))
+	print "socket binded to %s" %(port)
 
-	# Establish connection with client.
-	c, addr = s.accept()
-	print 'Got connection from', addr
+	# put the socket into listening mode
+	socket_server.listen(5)
+	print "socket is listening"
 
-	data = c.recv(1024)
+	# a forever loop until we interrupt it or
+	# an error occurs
+	while True:
 
-	# ----- pickle data ----- #
-	# obj = pickle.loads(data)
-	# print(obj.name, obj.phoneNumber)
+		# Establish connection with client.
+		client, addr = socket_server.accept()
+		print 'Got connection from', addr
 
-	# ----- string ----- #
-	# print data.encode('utf-8')
+		# ----- pickle data ----- #
+		# data = client.recv(1024)
+		# obj = pickle.loads(data)
+		# print(obj.name, obj.phoneNumber)
 
-	# ----- function args ----- #
-	args = pickle.loads(data)
-	count = func(*args)
+		# ----- string ----- #
+		# data = client.recv(1024)
+		# print data.encode('utf-8')
 
-	m = multiprocessing.Process(target=createFile, args=(count, ))
-	m.daemon = True
-	m.start()
+		# ----- function args ----- #
+		# data = client.recv(1024)
+		# args = pickle.loads(data)
+		# count = func(*args)
+		#
+		# m = multiprocessing.Process(target=createFile, args=(count, ))
+		# m.daemon = True
+		# m.start()
 
-	# send a thank you message to the client.
-	c.send('Thank you for connecting')
+		# ----- send struct package ----- #
+		# raw_mslen 确认之后要受到信息的长度
+		raw_mslen = client.recv(4)
+		if sys.byteorder == 'little':
+			msglen = struct.unpack('<I', raw_mslen)[0]
+		else:
+			msglen = struct.unpack('>I', raw_mslen)[0]
 
-	# Close the connection with the client 
-	c.close() 
+		recv_msg = client.recv(msglen)
+
+		# send a thank you message to the client.
+		client.send('Thank you for connecting.')
+
+		# Close the connection with the client
+		client.close()
