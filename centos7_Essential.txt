@@ -418,6 +418,21 @@ pip
     
     ./b2 --prefix="/home/migo/DEV_PROJECTS/WSRD/boost_1_64_0" address-model=64 variant=release threading=multi link=shared --with-python --with-atomic --with-program_options --with-regex --with-date_time --with-thread --with-iostreams --with-filesystem install
 
+    windows:
+        bootstrap.bat --prefix=\E:\DEV_PROJECTS\WSRD\boost_1_61_0
+
+        b2 --prefix="E:\DEV_PROJECTS\WSRD\boost_1_61_0" address-model=64 toolset=msvc-14.1 variant=release threading=multi link=static --with-python --with-atomic --with-program_options --with-regex --with-date_time --with-thread --with-iostreams --with-filesystem install
+        或者
+        b2 --prefix="E:\DEV_PROJECTS\WSRD\boost_1_61_0" address-model=64 toolset=msvc-14.1 variant=release threading=multi link=static install
+
+        如果用vs2017不能编译需要改project-config.jam:
+            import option ; 
+ 
+            using msvc : 14.1 : "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\bin\Hostx64\x64" ; 
+             
+            option.set keep-going : false ; 
+ 
+
 
 28.draco
     cd draco

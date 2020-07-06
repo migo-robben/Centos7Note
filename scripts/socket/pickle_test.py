@@ -36,3 +36,7 @@ class testObject(object):
 # 	print("Name: {}, PhoneNumber: {}".format(data.name, data.phoneNumber))
 # 	data = pickle.load(out_data)
 # 	print("Name: {}, PhoneNumber: {}".format(data.name, data.phoneNumber))
+
+
+a = "Hello"
+print(pickle.dumps(a))
