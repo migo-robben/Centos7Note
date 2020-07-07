@@ -735,6 +735,8 @@ pip
 
         docker run -it --rm -e NVIDIA_VISIBLE_DEVICES=all -e NVIDIA_DRIVER_CAPABILITIES=all --network host -v /home/migo/DEV_PROJECTS/WSRD/paddlepaddle:/root/paddlepaddle --gpus all paddlepaddle/paddle:1.6.0-gpu-cuda10.0-cudnn7 /bin/bash
 
+        docker run -it --rm -e NVIDIA_VISIBLE_DEVICES=all -e NVIDIA_DRIVER_CAPABILITIES=all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --network host -v /home/migo/PycharmProjects/paddlepaddle:/root/paddlepaddle --gpus all paddlepaddle/paddle:1.8.2-gpu-cuda10.0-cudnn7-visualdl /bin/bash
+
 53. docker command
     1. 快速删除所有容器 docker rm -f ($docker ps -aq)
     2. 创建网络 docker network create -d bridge my-network
