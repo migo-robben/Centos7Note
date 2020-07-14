@@ -253,6 +253,8 @@ pip
 
     python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --build-monolithic --materialx --houdini-location /opt/hfs17.5.425 --houdini ../../../WSRD/USD_v19.07_monolithic/
 
+    python build_usd.py --python --tests --usd-imaging --opencolorio --openimageio --alembic --hdf5 --materialx --ptex --build E:/DEV_PROJECTS/WSRD/USD/build --src E:/DEV_PROJECTS/WSRD/USD/src E:/DEV_PROJECTS/WSRD/USD/release
+
 
 18.创建文件和文件夹
     mkdir test
