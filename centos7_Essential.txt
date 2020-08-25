@@ -657,7 +657,8 @@ pip
             如果docker的版本是低于19.03，那么：
                 sudo docker run --runtime=nvidia -it --rm tensorflow/tensorflow:latest-gpu-py3 python
             如果docker的版本是等于或高于19.03，那么：
-                sudo docker run --gpus all -it --rm tensorflow/tensorflow:latest-gpu-py3 python
+                sudo docker run --gpus all --network host -it --rm tensorflow/tensorflow:latest-gpu-py3 python
+                sudo docker run --gpus all --network host -v /home/migo/PycharmProjects/tensorflow:/root/tensorflow -v /usr/lib64:/usr/lib64 -it --rm tensorflow/tensorflow:gpu-py3-2.3.0
     2. 
         Optional Features
             -py3 images come with Python 3 (3.5 for Ubuntu 16-based images; 3.6 for Ubuntu 18-based images) instead of Python 2.7
