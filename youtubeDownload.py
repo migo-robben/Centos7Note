@@ -32,7 +32,7 @@ def CreateQueue(b, e, d_dir, url, thread_count=5):
 
     for i in range(recursives):
         if i == recursives - 1:
-            if b == e:
+            if b == e or recursives == 1:
                 step_count.append([b, e])
             else:
                 step_count.append([t+1, e])
@@ -58,7 +58,7 @@ if __name__ == '__main__':
         e=32,
         d_dir="F:/YoutubeDownload",
         url='https://www.youtube.com/playlist?list=PLJV_el3uVTsO07RpBYFsXg-bN5Lu0nhdG',
-        thread_count=5)
+        thread_count=1)
 
     thread_list = []
     while not share_q.empty():
