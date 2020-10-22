@@ -968,3 +968,20 @@ rm -rf * && cmake -DHOUDINI_VERSION="18.0.401" -DOPENSUBDIVLIB="/home/migo/DEV_P
     git clone https://github.com/pyside/pyside2-tools.git
 
     python setup.py install --ignore-git --qmake=C:\Qt\5.13.2\msvc2017_64\bin\qmake.exe --openssl="C:\OpenSSL-Win64\bin" --cmake="C:\Qt\Tools\CMake_64\bin\cmake.exe"
+
+76. 
+    byte 字节
+    
+    char 1byte
+    short 2byte
+    int 4byte
+    float 4byte
+    long 4byte
+    double 8byte
+
+78 . launch tool houdin config
+    PATH = C:/test_3rd_party_plugins/houdini/18.0/plug-ins/HtoA/5.4.0/htoa-5.4.0_r1db094a_houdini-18.0.532/scripts/bin;F:/CLionProjects/USDCustomSchemaForDCC/install/Houdini/lib;C:/Program Files/Autodesk/Maya2020/plug-ins/xgen/bin;C:/Program Files/Autodesk/Maya2020/bin
+
+    HOUDINI_PATH = C:/test_3rd_party_plugins/houdini/18.0/plug-ins/HtoA/5.4.0/htoa-5.4.0_r1db094a_houdini-18.0.532;&
+
+    PYTHONPATH = &PYTHONPATH;F:/CLionProjects/USDCustomSchemaForDCC/install/Houdini/lib/python
